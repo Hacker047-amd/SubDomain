@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I am Sorry, Mom</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
     <!-- Floating Background Elements -->
@@ -17,13 +17,13 @@
         <div class="heart">❤️</div>
     </div>
 
-    <!-- Background Music Element linking directly to your uploaded file -->
-    <audio id="bg-music" loop>
-        <source src="Tumi-Jantei-Paro-Na.mp3" type="audio/mpeg">
+    <!-- Case-Corrected Audio Element pointing to the new nested assets path -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="assets/Tumi-Jantei-Paro-Na.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
-    <!-- Entry Button Overlay to bypass browser security locks -->
+    <!-- Initial Welcome Overlay to Force Autoplay securely -->
     <div id="welcome-overlay" class="overlay">
         <div class="overlay-box">
             <div class="heart-banner">💝</div>
@@ -33,9 +33,9 @@
         </div>
     </div>
 
-    <!-- Main Content Container -->
+    <!-- Main Container (Hidden until button is clicked) -->
     <div id="main-content" class="container" style="display: none;">
-        <!-- Language Switch Button -->
+        <!-- Interactive Language Button -->
         <button id="translate-btn" class="action-btn" onclick="toggleLanguage()">Translate to Bengali / বাংলায় পড়ো 🇧🇩</button>
 
         <div class="heart-banner">💝</div>
@@ -46,7 +46,7 @@
         </header>
         
         <main>
-            <!-- Core Letter -->
+            <!-- Core Apology Letter -->
             <section class="apology-card">
                 <p id="greeting" class="greeting">Dear Mom,</p>
                 <p id="highlight" class="highlight-text">"You didn't even know..."</p>
@@ -97,10 +97,13 @@
 
         function startEverything() {
             const music = document.getElementById('bg-music');
-            // Unlocks and plays the music on button click
-            music.play().catch(error => console.log("Playback engine unlocked"));
+            music.load();
+            music.play().then(() => {
+                console.log("Playback successfully started.");
+            }).catch(error => {
+                console.log("Playback block intercepted:", error);
+            });
 
-            // Hides the overlay screen and opens your apology layout
             document.getElementById('welcome-overlay').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
         }
@@ -148,7 +151,6 @@
                 document.getElementById('desc-2').innerText = "You forgive me for my mistakes time and time again, even when I carelessly repeat them.";
                 document.getElementById('sum-3').innerText = "🏠 Everything you do daily";
                 document.getElementById('desc-3').innerText = "From managing the household to caring for my health, your hard work never goes unnoticed or unappreciated.";
-                
                 isEnglish = true;
-            }
-        }
+                }
+                }
