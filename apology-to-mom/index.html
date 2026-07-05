@@ -9,12 +9,12 @@
 <body>
     <!-- Floating Background Elements -->
     <div class="background-animation">
-        <div class="heart">❤️</div>
-        <div class="heart">🌸</div>
-        <div class="heart">❤️</div>
-        <div class="heart">✨</div>
-        <div class="heart">🌸</div>
-        <div class="heart">❤️</div>
+        <div class="heart">&#10084;&#65039;</div>
+        <div class="heart">&#127800;</div>
+        <div class="heart">&#10084;&#65039;</div>
+        <div class="heart">&#10024;</div>
+        <div class="heart">&#127800;</div>
+        <div class="heart">&#10084;&#65039;</div>
     </div>
 
     <!-- Cloud-Optimized Audio Stream (Bypasses GitHub build errors entirely) -->
@@ -26,22 +26,22 @@
     <!-- Initial Welcome Overlay to Force Autoplay securely -->
     <div id="welcome-overlay" class="overlay">
         <div class="overlay-box">
-            <div class="heart-banner">💝</div>
+            <div class="heart-banner">&#128157;</div>
             <h2>A Message For Mom</h2>
             <p>Please click below to listen to my message</p>
-            <button class="primary-btn" onclick="startEverything()">Start Apology / গানটি চালু করো 🎵</button>
+            <button class="primary-btn" onclick="startEverything()">Start Apology / &#2455;&#2494;&#2472;&#2463;&#2495; &#2458;&#2494;&#2482;&#2497; &#2453;&#2480;&#2507; &#127925;</button>
         </div>
     </div>
 
     <!-- Main Container (Hidden until button is clicked) -->
     <div id="main-content" class="container" style="display: none;">
         <!-- Interactive Language Button -->
-        <button id="translate-btn" class="action-btn" onclick="toggleLanguage()">Translate to Bengali / বাংলায় পড়ো 🇧🇩</button>
+        <button id="translate-btn" class="action-btn" onclick="toggleLanguage()">Translate to Bengali / &#2476;&#2494;&#2434;&#2482;&#2494;&#2479;&#2492; &#2474;&#2524;&#2507; &#127463;&#127465;</button>
 
-        <div class="heart-banner">💝</div>
+        <div class="heart-banner">&#128157;</div>
 
         <header>
-            <h1 id="main-title">I'm Truly Sorry, Mom 💔</h1>
+            <h1 id="main-title">I'm Truly Sorry, Mom &#128148;</h1>
             <p id="subtitle" class="subtitle">Please read this message from my heart</p>
         </header>
         
@@ -68,21 +68,21 @@
                 <h2 id="grateful-title">Things I Am Forever Grateful For</h2>
                 
                 <details>
-                    <summary id="sum-1">✨ You always look out for me</summary>
+                    <summary id="sum-1">&#10024; You always look out for me</summary>
                     <div class="details-content">
                         <p id="desc-1">Even when you are strict, I know it is because you care deeply about our family, our future, and our well-being.</p>
                     </div>
                 </details>
 
                 <details>
-                    <summary id="sum-2">⏳ Your endless patience</summary>
+                    <summary id="sum-2">&#8987; Your endless patience</summary>
                     <div class="details-content">
                         <p id="desc-2">You forgive me for my mistakes time and time again, even when I carelessly repeat them.</p>
                     </div>
                 </details>
 
                 <details>
-                    <summary id="sum-3">🏠 Everything you do daily</summary>
+                    <summary id="sum-3">&#127968; Everything you do daily</summary>
                     <div class="details-content">
                         <p id="desc-3">From managing the household to caring for my health, your hard work never goes unnoticed or unappreciated.</p>
                     </div>
@@ -93,64 +93,137 @@
 
     <!-- Script to unlock music and translate text -->
     <script>
+        "use strict";
+
         let isEnglish = true;
 
-        function startEverything() {
-            const music = document.getElementById('bg-music');
-            music.load();
-            music.play().then(() => {
-                console.log("Playback successfully started.");
-            }).catch(error => {
-                console.log("Playback block intercepted:", error);
-            });
+        function getElement(id) {
+            var el = document.getElementById(id);
+            if (!el) {
+                console.error("Missing element: #" + id);
+            }
+            return el;
+        }
 
-            document.getElementById('welcome-overlay').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
+        function setText(id, text) {
+            var el = getElement(id);
+            if (el) el.innerText = text;
+        }
+
+        function setHTML(id, html) {
+            var el = getElement(id);
+            if (el) el.innerHTML = html;
+        }
+
+        function showAudioError() {
+            var overlay = getElement("welcome-overlay");
+            if (overlay && overlay.style.display !== "none") return;
+            var notice = document.getElementById("audio-error-notice");
+            if (!notice) {
+                notice = document.createElement("div");
+                notice.id = "audio-error-notice";
+                notice.style.cssText = "text-align:center;color:#c53030;font-size:0.85rem;margin-bottom:12px;";
+                notice.textContent = "Audio could not be played. You can still read the message below.";
+                var container = getElement("main-content");
+                if (container) container.prepend(notice);
+            }
+        }
+
+        (function setupAudioErrorHandling() {
+            var music = getElement("bg-music");
+            if (music) {
+                music.addEventListener("error", function(e) {
+                    var mediaErr = music.error;
+                    var msg = mediaErr ? "code=" + mediaErr.code + " " + (mediaErr.message || "") : "unknown";
+                    console.error("Audio load error:", msg);
+                    showAudioError();
+                });
+            }
+        })();
+
+        function startEverything() {
+            var music = getElement("bg-music");
+            var overlay = getElement("welcome-overlay");
+            var content = getElement("main-content");
+
+            if (!overlay || !content) {
+                console.error("Critical page elements missing; cannot proceed.");
+                return;
+            }
+
+            overlay.style.display = "none";
+            content.style.display = "block";
+
+            if (!music) {
+                console.error("Audio element not found; skipping playback.");
+                showAudioError();
+                return;
+            }
+
+            try {
+                music.load();
+            } catch (loadErr) {
+                console.error("Audio load() threw:", loadErr);
+                showAudioError();
+                return;
+            }
+
+            music.play().then(function() {
+                console.log("Playback successfully started.");
+            }).catch(function(error) {
+                console.error("Playback failed:", error.message || error);
+                showAudioError();
+            });
         }
 
         function toggleLanguage() {
-            if (isEnglish) {
-                document.getElementById('translate-btn').innerText = "Translate to English / ইংরেজিতে পড়ো 🇬🇧";
-                document.getElementById('main-title').innerText = "আই অ্যাম ট্রুলি সরি, মা 💔";
-                document.getElementById('subtitle').innerText = "আমার মনের কিছু কথা, প্লিজ একবার পড়ো";
-                document.getElementById('greeting').innerText = "প্রিয় মা,";
-                document.getElementById('highlight').innerText = "“তুমি জানতেও পারোনি...”";
-                document.getElementById('letter-content').innerHTML = `
-                    <p>মা, তুমি জানতেও পারোনি যে দোকানদার আর আমি ভুল করে ডিসকাউন্টের কথা সম্পূর্ণ ভুলে গিয়েছিলাম। তুমি যখন বকা দিলে, তখন নিজের ভুল আড়াল করতে গিয়ে আমি মাথা গরম করে এমন কিছু খারাপ কথা বলে ফেলেছি যা আমার একদম বলা উচিত হয়নি। তুমি একদম ঠিক ছিলে মা, আমার এভাবে রিয়্যাক্ট করা একেবারেই উচিত হয়নি।</p>
-                    <p>আমি জানি তুমি প্রতিদিন আমাদের জন্য কতটা কষ্ট করো। আমার কথাগুলো খুবই কৃতজ্ঞতাহীন আর কষ্টদায়ক ছিল। আমি আমার ভুল বুঝতে পেরেছি। প্লিজ মা, একটু সময় নাও, কিন্তু জেনে রেখো আমি তোমাকে অনেক ভালোবাসি। আমি আমার ব্যবহারের জন্য মন থেকে ক্ষমাপ্রার্থী।</p>
-                `;
-                document.getElementById('promise-title').innerText = "আমার প্রমিস:";
-                document.getElementById('promise-text').innerText = "আমি এরপর থেকে যেকোনো কাজে আরও দায়িত্বশীল হব, মাথা ঠাণ্ডা রাখব এবং কখনো তোমার সাথে এভাবে খারাপ ব্যবহার করব না।";
-                document.getElementById('signature').innerText = "- তোমার সন্তান";
-                document.getElementById('grateful-title').innerText = "যেসব জিনিসের জন্য আমি তোমার কাছে চিরকৃতজ্ঞ";
-                document.getElementById('sum-1').innerText = "✨ তুমি সবসময় আমার খেয়াল রাখো";
-                document.getElementById('desc-1').innerText = "তুমি শাসন করো কারণ তুমি আমাকে ভালোবাসো এবং আমাদের ভালো চাও, এটা আমি মনেপ্রাণে বিশ্বাস করি।";
-                document.getElementById('sum-2').innerText = "⏳ তোমার সীমাহীন ধৈর্য";
-                document.getElementById('desc-2').innerText = "আমি বারবার একই ভুল করার পরেও তুমি আমাকে প্রতিবার ক্ষমা করে বুকে টেনে নাও।";
-                document.getElementById('sum-3').innerText = "🏠 প্রতিদিনের এত পরিশ্রম";
-                document.getElementById('desc-3').innerText = "সংসার সামলানো থেকে শুরু করে আমার শরীরের খেয়াল রাখা—তোমার কোনো অবদানই আমি ভুলে যাইনি মা।";
-                
-                isEnglish = false;
-            } else {
-                document.getElementById('translate-btn').innerText = "Translate to Bengali / বাংলায় পড়ো 🇧🇩";
-                document.getElementById('main-title').innerText = "I'm Truly Sorry, Mom 💔";
-                document.getElementById('subtitle').innerText = "Please read this message from my heart";
-                document.getElementById('greeting').innerText = "Dear Mom,";
-                document.getElementById('highlight').innerText = '"You didn\'t even know..."';
-                document.getElementById('letter-content').innerHTML = `
-                    <p>Mom, you didn't even know that the shopkeeper and I had accidentally forgotten completely about the medicine discount. When you scolded me, I tried to cover up my mistake by losing my temper, and I said some terrible things that I should never have muttered. You were completely right to be upset, and my reaction was entirely uncalled for.</p>
-                    <p>I know how much hard work you put in for us every single day. My words were incredibly ungrateful and hurtful. I understand my mistake completely now. Please take all the time you need, but please know that I love you deeply and am truly sorry for my behavior.</p>
-                `;
-                document.getElementById('promise-title').innerText = "My Promise:";
-                document.getElementById('promise-text').innerText = "I will be much more responsible with tasks, keep my head cool, and never talk back to you like that again.";
-                document.getElementById('signature').innerText = "- Your Loving Child";
-                document.getElementById('grateful-title').innerText = "Things I Am Forever Grateful For";
-                document.getElementById('sum-1').innerText = "✨ You always look out for me";
-                document.getElementById('desc-1').innerText = "Even when you are strict, I know it is because you care deeply about our family, our future, and our well-being.";
-                document.getElementById('sum-2').innerText = "⏳ Your endless patience";
-                document.getElementById('desc-2').innerText = "You forgive me for my mistakes time and time again, even when I carelessly repeat them.";
-                document.getElementById('sum-3').innerText = "🏠 Everything you do daily";
-                document.getElementById('desc-3').innerText = "From managing the household to caring for my health, your hard work never goes unnoticed or unappreciated.";
-                isEnglish = true;
+            try {
+                if (isEnglish) {
+                    setText("translate-btn", "Translate to English / \u0987\u0982\u09B0\u09C7\u099C\u09BF\u09A4\u09C7 \u09AA\u09DC\u09CB \uD83C\uDDEC\uD83C\uDDE7");
+                    setText("main-title", "\u0986\u0987 \u0985\u09CD\u09AF\u09BE\u09AE \u099F\u09CD\u09B0\u09C1\u09B2\u09BF \u09B8\u09B0\u09BF, \u09AE\u09BE \uD83D\uDC94");
+                    setText("subtitle", "\u0986\u09AE\u09BE\u09B0 \u09AE\u09A8\u09C7\u09B0 \u0995\u09BF\u099B\u09C1 \u0995\u09A5\u09BE, \u09AA\u09CD\u09B2\u09BF\u099C \u098F\u0995\u09AC\u09BE\u09B0 \u09AA\u09DC\u09CB");
+                    setText("greeting", "\u09AA\u09CD\u09B0\u09BF\u09DF \u09AE\u09BE,");
+                    setText("highlight", "\u201C\u09A4\u09C1\u09AE\u09BF \u099C\u09BE\u09A8\u09A4\u09C7\u0993 \u09AA\u09BE\u09B0\u09CB\u09A8\u09BF...\u201D");
+                    setHTML("letter-content", "<p>\u09AE\u09BE, \u09A4\u09C1\u09AE\u09BF \u099C\u09BE\u09A8\u09A4\u09C7\u0993 \u09AA\u09BE\u09B0\u09CB\u09A8\u09BF \u09AF\u09C7 \u09A6\u09CB\u0995\u09BE\u09A8\u09A6\u09BE\u09B0 \u0986\u09B0 \u0986\u09AE\u09BF \u09AD\u09C1\u09B2 \u0995\u09B0\u09C7 \u09A1\u09BF\u09B8\u0995\u09BE\u0989\u09A8\u09CD\u099F\u09C7\u09B0 \u0995\u09A5\u09BE \u09B8\u09AE\u09CD\u09AA\u09C2\u09B0\u09CD\u09A3 \u09AD\u09C1\u09B2\u09C7 \u0997\u09BF\u09DF\u09C7\u099B\u09BF\u09B2\u09BE\u09AE\u0964 \u09A4\u09C1\u09AE\u09BF \u09AF\u0996\u09A8 \u09AC\u0995\u09BE \u09A6\u09BF\u09B2\u09C7, \u09A4\u0996\u09A8 \u09A8\u09BF\u099C\u09C7\u09B0 \u09AD\u09C1\u09B2 \u0986\u09DC\u09BE\u09B2 \u0995\u09B0\u09A4\u09C7 \u0997\u09BF\u09DF\u09C7 \u0986\u09AE\u09BF \u09AE\u09BE\u09A5\u09BE \u0997\u09B0\u09AE \u0995\u09B0\u09C7 \u098F\u09AE\u09A8 \u0995\u09BF\u099B\u09C1 \u0996\u09BE\u09B0\u09BE\u09AA \u0995\u09A5\u09BE \u09AC\u09B2\u09C7 \u09AB\u09C7\u09B2\u09C7\u099B\u09BF \u09AF\u09BE \u0986\u09AE\u09BE\u09B0 \u098F\u0995\u09A6\u09AE \u09AC\u09B2\u09BE \u0989\u099A\u09BF\u09A4 \u09B9\u09DF\u09A8\u09BF\u0964 \u09A4\u09C1\u09AE\u09BF \u098F\u0995\u09A6\u09AE \u09A0\u09BF\u0995 \u099B\u09BF\u09B2\u09C7 \u09AE\u09BE, \u0986\u09AE\u09BE\u09B0 \u098F\u09AD\u09BE\u09AC\u09C7 \u09B0\u09BF\u09DF\u09CD\u09AF\u09BE\u0995\u09CD\u099F \u0995\u09B0\u09BE \u098F\u0995\u09C7\u09AC\u09BE\u09B0\u09C7\u0987 \u0989\u099A\u09BF\u09A4 \u09B9\u09DF\u09A8\u09BF\u0964</p><p>\u0986\u09AE\u09BF \u099C\u09BE\u09A8\u09BF \u09A4\u09C1\u09AE\u09BF \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8 \u0986\u09AE\u09BE\u09A6\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u0995\u09A4\u099F\u09BE \u0995\u09B7\u09CD\u099F \u0995\u09B0\u09CB\u0964 \u0986\u09AE\u09BE\u09B0 \u0995\u09A5\u09BE\u0997\u09C1\u09B2\u09CB \u0996\u09C1\u09AC\u0987 \u0995\u09C3\u09A4\u099C\u09CD\u099E\u09A4\u09BE\u09B9\u09C0\u09A8 \u0986\u09B0 \u0995\u09B7\u09CD\u099F\u09A6\u09BE\u09DF\u0995 \u099B\u09BF\u09B2\u0964 \u0986\u09AE\u09BF \u0986\u09AE\u09BE\u09B0 \u09AD\u09C1\u09B2 \u09AC\u09C1\u099D\u09A4\u09C7 \u09AA\u09C7\u09B0\u09C7\u099B\u09BF\u0964 \u09AA\u09CD\u09B2\u09BF\u099C \u09AE\u09BE, \u098F\u0995\u099F\u09C1 \u09B8\u09AE\u09DF \u09A8\u09BE\u0993, \u0995\u09BF\u09A8\u09CD\u09A4\u09C1 \u099C\u09C7\u09A8\u09C7 \u09B0\u09C7\u0996\u09CB \u0986\u09AE\u09BF \u09A4\u09CB\u09AE\u09BE\u0995\u09C7 \u0985\u09A8\u09C7\u0995 \u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09BF\u0964 \u0986\u09AE\u09BF \u0986\u09AE\u09BE\u09B0 \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u09AE\u09A8 \u09A5\u09C7\u0995\u09C7 \u0995\u09CD\u09B7\u09AE\u09BE\u09AA\u09CD\u09B0\u09BE\u09B0\u09CD\u09A5\u09C0\u0964</p>");
+                    setText("promise-title", "\u0986\u09AE\u09BE\u09B0 \u09AA\u09CD\u09B0\u09AE\u09BF\u09B8:");
+                    setText("promise-text", "\u0986\u09AE\u09BF \u098F\u09B0\u09AA\u09B0 \u09A5\u09C7\u0995\u09C7 \u09AF\u09C7\u0995\u09CB\u09A8\u09CB \u0995\u09BE\u099C\u09C7 \u0986\u09B0\u0993 \u09A6\u09BE\u09DF\u09BF\u09A4\u09CD\u09AC\u09B6\u09C0\u09B2 \u09B9\u09AC, \u09AE\u09BE\u09A5\u09BE \u09A0\u09BE\u09A3\u09CD\u09A1\u09BE \u09B0\u09BE\u0996\u09AC \u098F\u09AC\u0982 \u0995\u0996\u09A8\u09CB \u09A4\u09CB\u09AE\u09BE\u09B0 \u09B8\u09BE\u09A5\u09C7 \u098F\u09AD\u09BE\u09AC\u09C7 \u0996\u09BE\u09B0\u09BE\u09AA \u09AC\u09CD\u09AF\u09AC\u09B9\u09BE\u09B0 \u0995\u09B0\u09AC \u09A8\u09BE\u0964");
+                    setText("signature", "- \u09A4\u09CB\u09AE\u09BE\u09B0 \u09B8\u09A8\u09CD\u09A4\u09BE\u09A8");
+                    setText("grateful-title", "\u09AF\u09C7\u09B8\u09AC \u099C\u09BF\u09A8\u09BF\u09B8\u09C7\u09B0 \u099C\u09A8\u09CD\u09AF \u0986\u09AE\u09BF \u09A4\u09CB\u09AE\u09BE\u09B0 \u0995\u09BE\u099B\u09C7 \u099A\u09BF\u09B0\u0995\u09C3\u09A4\u099C\u09CD\u099E");
+                    setText("sum-1", "\u2728 \u09A4\u09C1\u09AE\u09BF \u09B8\u09AC\u09B8\u09AE\u09DF \u0986\u09AE\u09BE\u09B0 \u0996\u09C7\u09DF\u09BE\u09B2 \u09B0\u09BE\u0996\u09CB");
+                    setText("desc-1", "\u09A4\u09C1\u09AE\u09BF \u09B6\u09BE\u09B8\u09A8 \u0995\u09B0\u09CB \u0995\u09BE\u09B0\u09A3 \u09A4\u09C1\u09AE\u09BF \u0986\u09AE\u09BE\u0995\u09C7 \u09AD\u09BE\u09B2\u09CB\u09AC\u09BE\u09B8\u09CB \u098F\u09AC\u0982 \u0986\u09AE\u09BE\u09A6\u09C7\u09B0 \u09AD\u09BE\u09B2\u09CB \u099A\u09BE\u0993, \u098F\u099F\u09BE \u0986\u09AE\u09BF \u09AE\u09A8\u09C7\u09AA\u09CD\u09B0\u09BE\u09A3\u09C7 \u09AC\u09BF\u09B6\u09CD\u09AC\u09BE\u09B8 \u0995\u09B0\u09BF\u0964");
+                    setText("sum-2", "\u231B \u09A4\u09CB\u09AE\u09BE\u09B0 \u09B8\u09C0\u09AE\u09BE\u09B9\u09C0\u09A8 \u09A7\u09C8\u09B0\u09CD\u09AF");
+                    setText("desc-2", "\u0986\u09AE\u09BF \u09AC\u09BE\u09B0\u09AC\u09BE\u09B0 \u098F\u0995\u0987 \u09AD\u09C1\u09B2 \u0995\u09B0\u09BE\u09B0 \u09AA\u09B0\u09C7\u0993 \u09A4\u09C1\u09AE\u09BF \u0986\u09AE\u09BE\u0995\u09C7 \u09AA\u09CD\u09B0\u09A4\u09BF\u09AC\u09BE\u09B0 \u0995\u09CD\u09B7\u09AE\u09BE \u0995\u09B0\u09C7 \u09AC\u09C1\u0995\u09C7 \u099F\u09C7\u09A8\u09C7 \u09A8\u09BE\u0993\u0964");
+                    setText("sum-3", "\uD83C\uDFE0 \u09AA\u09CD\u09B0\u09A4\u09BF\u09A6\u09BF\u09A8\u09C7\u09B0 \u098F\u09A4 \u09AA\u09B0\u09BF\u09B6\u09CD\u09B0\u09AE");
+                    setText("desc-3", "\u09B8\u0982\u09B8\u09BE\u09B0 \u09B8\u09BE\u09AE\u09B2\u09BE\u09A8\u09CB \u09A5\u09C7\u0995\u09C7 \u09B6\u09C1\u09B0\u09C1 \u0995\u09B0\u09C7 \u0986\u09AE\u09BE\u09B0 \u09B6\u09B0\u09C0\u09B0\u09C7\u09B0 \u0996\u09C7\u09DF\u09BE\u09B2 \u09B0\u09BE\u0996\u09BE\u2014\u09A4\u09CB\u09AE\u09BE\u09B0 \u0995\u09CB\u09A8\u09CB \u0985\u09AC\u09A6\u09BE\u09A8\u0987 \u0986\u09AE\u09BF \u09AD\u09C1\u09B2\u09C7 \u09AF\u09BE\u0987\u09A8\u09BF \u09AE\u09BE\u0964");
+
+                    isEnglish = false;
+                } else {
+                    setText("translate-btn", "Translate to Bengali / \u09AC\u09BE\u0982\u09B2\u09BE\u09DF \u09AA\u09DC\u09CB \uD83C\uDDE7\uD83C\uDDE9");
+                    setText("main-title", "I'm Truly Sorry, Mom \uD83D\uDC94");
+                    setText("subtitle", "Please read this message from my heart");
+                    setText("greeting", "Dear Mom,");
+                    setText("highlight", "\"You didn't even know...\"");
+                    setHTML("letter-content", "<p>Mom, you didn't even know that the shopkeeper and I had accidentally forgotten completely about the medicine discount. When you scolded me, I tried to cover up my mistake by losing my temper, and I said some terrible things that I should never have muttered. You were completely right to be upset, and my reaction was entirely uncalled for.</p><p>I know how much hard work you put in for us every single day. My words were incredibly ungrateful and hurtful. I understand my mistake completely now. Please take all the time you need, but please know that I love you deeply and am truly sorry for my behavior.</p>");
+                    setText("promise-title", "My Promise:");
+                    setText("promise-text", "I will be much more responsible with tasks, keep my head cool, and never talk back to you like that again.");
+                    setText("signature", "- Your Loving Child");
+                    setText("grateful-title", "Things I Am Forever Grateful For");
+                    setText("sum-1", "\u2728 You always look out for me");
+                    setText("desc-1", "Even when you are strict, I know it is because you care deeply about our family, our future, and our well-being.");
+                    setText("sum-2", "\u231B Your endless patience");
+                    setText("desc-2", "You forgive me for my mistakes time and time again, even when I carelessly repeat them.");
+                    setText("sum-3", "\uD83C\uDFE0 Everything you do daily");
+                    setText("desc-3", "From managing the household to caring for my health, your hard work never goes unnoticed or unappreciated.");
+                    isEnglish = true;
                 }
-                }
+            } catch (err) {
+                console.error("Translation toggle failed:", err);
+            }
+        }
+
+        window.addEventListener("error", function(event) {
+            console.error("Uncaught error:", event.message, "at", event.filename + ":" + event.lineno);
+        });
+    </script>
+</body>
+</html>
