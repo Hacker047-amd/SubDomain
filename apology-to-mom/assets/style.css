@@ -91,18 +91,21 @@ body {
     font-size: 0.95rem;
 }
 
-/* Buttons */
+/* Buttons — shared base */
+.btn-base {
+    font-weight: 700;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
 .primary-btn {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent) 100%);
     color: white;
     border: none;
     padding: 14px 28px;
     font-size: 1rem;
-    font-weight: 700;
-    border-radius: 50px;
-    cursor: pointer;
     box-shadow: 0 6px 15px rgba(213, 63, 140, 0.3);
-    transition: all 0.3s ease;
 }
 
 .primary-btn:hover {
@@ -117,10 +120,6 @@ body {
     border: 2px solid var(--primary-color);
     padding: 10px 20px;
     font-size: 0.9rem;
-    font-weight: 700;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 .action-btn:hover {
