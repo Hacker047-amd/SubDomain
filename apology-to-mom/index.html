@@ -29,14 +29,14 @@
             <div class="heart-banner">💝</div>
             <h2>A Message For Mom</h2>
             <p>Please click below to listen to my message</p>
-            <button class="primary-btn" onclick="startEverything()">Start Apology / গানটি চালু করো 🎵</button>
+            <button class="btn-base primary-btn" onclick="startEverything()">Start Apology / গানটি চালু করো 🎵</button>
         </div>
     </div>
 
     <!-- Main Container (Hidden until button is clicked) -->
     <div id="main-content" class="container" style="display: none;">
         <!-- Interactive Language Button -->
-        <button id="translate-btn" class="action-btn" onclick="toggleLanguage()">Translate to Bengali / বাংলায় পড়ো 🇧🇩</button>
+        <button id="translate-btn" class="btn-base action-btn" onclick="toggleLanguage()">Translate to Bengali / বাংলায় পড়ো 🇧🇩</button>
 
         <div class="heart-banner">💝</div>
 
@@ -91,9 +91,9 @@
         </main>
     </div>
 
-    <!-- Script to unlock music and translate text -->
+    <script src="assets/translations.js"></script>
     <script>
-        let isEnglish = true;
+        let currentLang = 'en';
 
         function startEverything() {
             const music = document.getElementById('bg-music');
@@ -109,48 +109,9 @@
         }
 
         function toggleLanguage() {
-            if (isEnglish) {
-                document.getElementById('translate-btn').innerText = "Translate to English / ইংরেজিতে পড়ো 🇬🇧";
-                document.getElementById('main-title').innerText = "আই অ্যাম ট্রুলি সরি, মা 💔";
-                document.getElementById('subtitle').innerText = "আমার মনের কিছু কথা, প্লিজ একবার পড়ো";
-                document.getElementById('greeting').innerText = "প্রিয় মা,";
-                document.getElementById('highlight').innerText = "“তুমি জানতেও পারোনি...”";
-                document.getElementById('letter-content').innerHTML = `
-                    <p>মা, তুমি জানতেও পারোনি যে দোকানদার আর আমি ভুল করে ডিসকাউন্টের কথা সম্পূর্ণ ভুলে গিয়েছিলাম। তুমি যখন বকা দিলে, তখন নিজের ভুল আড়াল করতে গিয়ে আমি মাথা গরম করে এমন কিছু খারাপ কথা বলে ফেলেছি যা আমার একদম বলা উচিত হয়নি। তুমি একদম ঠিক ছিলে মা, আমার এভাবে রিয়্যাক্ট করা একেবারেই উচিত হয়নি।</p>
-                    <p>আমি জানি তুমি প্রতিদিন আমাদের জন্য কতটা কষ্ট করো। আমার কথাগুলো খুবই কৃতজ্ঞতাহীন আর কষ্টদায়ক ছিল। আমি আমার ভুল বুঝতে পেরেছি। প্লিজ মা, একটু সময় নাও, কিন্তু জেনে রেখো আমি তোমাকে অনেক ভালোবাসি। আমি আমার ব্যবহারের জন্য মন থেকে ক্ষমাপ্রার্থী।</p>
-                `;
-                document.getElementById('promise-title').innerText = "আমার প্রমিস:";
-                document.getElementById('promise-text').innerText = "আমি এরপর থেকে যেকোনো কাজে আরও দায়িত্বশীল হব, মাথা ঠাণ্ডা রাখব এবং কখনো তোমার সাথে এভাবে খারাপ ব্যবহার করব না।";
-                document.getElementById('signature').innerText = "- তোমার সন্তান";
-                document.getElementById('grateful-title').innerText = "যেসব জিনিসের জন্য আমি তোমার কাছে চিরকৃতজ্ঞ";
-                document.getElementById('sum-1').innerText = "✨ তুমি সবসময় আমার খেয়াল রাখো";
-                document.getElementById('desc-1').innerText = "তুমি শাসন করো কারণ তুমি আমাকে ভালোবাসো এবং আমাদের ভালো চাও, এটা আমি মনেপ্রাণে বিশ্বাস করি।";
-                document.getElementById('sum-2').innerText = "⏳ তোমার সীমাহীন ধৈর্য";
-                document.getElementById('desc-2').innerText = "আমি বারবার একই ভুল করার পরেও তুমি আমাকে প্রতিবার ক্ষমা করে বুকে টেনে নাও।";
-                document.getElementById('sum-3').innerText = "🏠 প্রতিদিনের এত পরিশ্রম";
-                document.getElementById('desc-3').innerText = "সংসার সামলানো থেকে শুরু করে আমার শরীরের খেয়াল রাখা—তোমার কোনো অবদানই আমি ভুলে যাইনি মা।";
-                
-                isEnglish = false;
-            } else {
-                document.getElementById('translate-btn').innerText = "Translate to Bengali / বাংলায় পড়ো 🇧🇩";
-                document.getElementById('main-title').innerText = "I'm Truly Sorry, Mom 💔";
-                document.getElementById('subtitle').innerText = "Please read this message from my heart";
-                document.getElementById('greeting').innerText = "Dear Mom,";
-                document.getElementById('highlight').innerText = '"You didn\'t even know..."';
-                document.getElementById('letter-content').innerHTML = `
-                    <p>Mom, you didn't even know that the shopkeeper and I had accidentally forgotten completely about the medicine discount. When you scolded me, I tried to cover up my mistake by losing my temper, and I said some terrible things that I should never have muttered. You were completely right to be upset, and my reaction was entirely uncalled for.</p>
-                    <p>I know how much hard work you put in for us every single day. My words were incredibly ungrateful and hurtful. I understand my mistake completely now. Please take all the time you need, but please know that I love you deeply and am truly sorry for my behavior.</p>
-                `;
-                document.getElementById('promise-title').innerText = "My Promise:";
-                document.getElementById('promise-text').innerText = "I will be much more responsible with tasks, keep my head cool, and never talk back to you like that again.";
-                document.getElementById('signature').innerText = "- Your Loving Child";
-                document.getElementById('grateful-title').innerText = "Things I Am Forever Grateful For";
-                document.getElementById('sum-1').innerText = "✨ You always look out for me";
-                document.getElementById('desc-1').innerText = "Even when you are strict, I know it is because you care deeply about our family, our future, and our well-being.";
-                document.getElementById('sum-2').innerText = "⏳ Your endless patience";
-                document.getElementById('desc-2').innerText = "You forgive me for my mistakes time and time again, even when I carelessly repeat them.";
-                document.getElementById('sum-3').innerText = "🏠 Everything you do daily";
-                document.getElementById('desc-3').innerText = "From managing the household to caring for my health, your hard work never goes unnoticed or unappreciated.";
-                isEnglish = true;
-                }
-                }
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            applyTranslation(currentLang);
+        }
+    </script>
+</body>
+</html>
