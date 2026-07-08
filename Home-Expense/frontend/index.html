@@ -1,131 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home Expense</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>🏠 Home Expense</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#667eea"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Home Expense"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png"/>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <h1>🏠 Home Expense</h1>
-    <p>Track your family expenses easily</p>
-  </header>
-
-  <!-- SUMMARY CARDS -->
-  <section class="summary">
-    <div class="card total">
-      <h3>Total Spent</h3>
-      <p id="totalAmount">₹0</p>
+  <div id="installBanner" class="install-banner" style="display:none;">
+    <div class="install-content">
+      <div class="install-icon">📱</div>
+      <div class="install-text">
+        <strong>Install Home Expense App</strong>
+        <p>Add to home screen for quick access</p>
+      </div>
+      <button id="installBtn" class="install-btn">Install</button>
+      <button class="install-close" onclick="dismissInstall()">✕</button>
     </div>
-    <div class="card count">
-      <h3>Total Entries</h3>
-      <p id="totalCount">0</p>
+  </div>
+
+  <div id="loginScreen" class="login-screen" style="display:none;">
+    <div class="login-card">
+      <div class="login-icon">🏠</div>
+      <h2>Home Expense</h2>
+      <p class="login-subtitle">Select your account and login</p>
+
+      <div class="user-select">
+        <label class="user-option">
+          <input type="radio" name="userType" value="admin" checked/>
+          <div class="user-card">
+            <div class="user-emoji">👨‍💻</div>
+            <div class="user-name">Admin</div>
+            <div class="user-desc">Full Access</div>
+          </div>
+        </label>
+        <label class="user-option">
+          <input type="radio" name="userType" value="Damayanty"/>
+          <div class="user-card">
+            <div class="user-emoji">👩</div>
+            <div class="user-name">Damayanty</div>
+            <div class="user-desc">Family Member</div>
+          </div>
+        </label>
+      </div>
+
+      <input type="password" id="loginPassword" placeholder="🔒 Enter password"/>
+      <button id="loginBtn" onclick="doLogin()">🔓 Login to Home Expense</button>
+      <p id="loginError" class="login-error"></p>
+
+      <div class="login-footer">
+        🏠 Home Expense • Made with ❤️ for Family
+      </div>
     </div>
-    <div class="card highest">
-      <h3>Highest Expense</h3>
-      <p id="highestAmount">₹0</p>
+  </div>
+
+  <div id="loadingScreen">
+    <div class="loader-content">
+      <div class="loader-icon">🏠</div>
+      <h2>Home Expense</h2>
+      <p>Loading your expenses...</p>
+      <div class="loader-bar">
+        <div class="loader-fill"></div>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <!-- ADD EXPENSE FORM -->
-  <section class="form-section">
-    <h2>➕ Add New Expense</h2>
-    <form id="expenseForm">
-      
-      <div class="form-group">
-        <label>What did you buy?</label>
-        <input type="text" id="title" placeholder="e.g. Vegetables, Milk" required />
+  <div id="app" style="display:none;">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">🏠</div>
+        <div>
+          <h2>Home Expense</h2>
+          <p>Family Tracker</p>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Amount (₹)</label>
-        <input type="number" id="amount" placeholder="e.g. 250" required />
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="add" onclick="showPage('add')">
+          <span class="nav-icon">➕</span>
+          <span>Add Expense</span>
+        </a>
+        <a href="#" class="nav-item" data-page="history" onclick="showPage('history')">
+          <span class="nav-icon">📋</span>
+          <span>History</span>
+        </a>
+        <a href="#" class="nav-item" data-page="reports" onclick="showPage('reports')">
+          <span class="nav-icon">📈</span>
+          <span>Reports</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">👤</div>
+          <div class="user-details">
+            <div class="user-fullname" id="userFullname">User</div>
+            <div class="user-role" id="userRole">Role</div>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <div class="topbar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <div class="topbar-title">
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Welcome to Home Expense</p>
+        </div>
+        <div class="topbar-right">
+          <span id="currentDateTime"></span>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Category</label>
-        <select id="category">
-          <option value="Groceries">🛒 Groceries</option>
-          <option value="Vegetables">🥦 Vegetables</option>
-          <option value="Fruits">🍎 Fruits</option>
-          <option value="Milk & Dairy">🥛 Milk & Dairy</option>
-          <option value="Medical">💊 Medical</option>
-          <option value="Electricity">💡 Electricity</option>
-          <option value="Water">💧 Water</option>
-          <option value="School">🏫 School</option>
-          <option value="Transport">🚗 Transport</option>
-          <option value="Clothes">👗 Clothes</option>
-          <option value="Entertainment">🎬 Entertainment</option>
-          <option value="Other">📦 Other</option>
-        </select>
+      <div id="page-dashboard" class="page active">
+
+        <div class="welcome-banner">
+          <div class="welcome-text">
+            <h2>👋 Hello!</h2>
+            <p>Here is your Home Expense summary</p>
+          </div>
+          <div class="welcome-icon">🏠</div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="summary-card purple">
+            <div class="card-icon">💰</div>
+            <div class="card-info">
+              <h3>Total Spent</h3>
+              <p id="dash-total">₹0</p>
+              <small>All time</small>
+            </div>
+          </div>
+          <div class="summary-card blue">
+            <div class="card-icon">📝</div>
+            <div class="card-info">
+              <h3>Total Entries</h3>
+              <p id="dash-count">0</p>
+              <small>Expenses logged</small>
+            </div>
+          </div>
+          <div class="summary-card orange">
+            <div class="card-icon">📅</div>
+            <div class="card-info">
+              <h3>This Month</h3>
+              <p id="dash-month">₹0</p>
+              <small id="dash-month-name">Current month</small>
+            </div>
+          </div>
+          <div class="summary-card red">
+            <div class="card-icon">🔝</div>
+            <div class="card-info">
+              <h3>Highest Expense</h3>
+              <p id="dash-highest">₹0</p>
+              <small>Single entry</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header">
+            <h3>🕐 Recent Expenses</h3>
+            <button class="btn-link" onclick="showPage('history')">View All →</button>
+          </div>
+          <div id="recentExpenses">
+            <div class="empty-state">
+              <p>🏠</p>
+              <h3>No expenses yet</h3>
+              <p>Start adding expenses to Home Expense!</p>
+              <button class="btn-primary" onclick="showPage('add')">➕ Add First Expense</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header">
+            <h3>🗂️ Category Breakdown</h3>
+          </div>
+          <div id="categoryBreakdown">
+            <p style="color:#999;text-align:center;padding:20px;">No data yet</p>
+          </div>
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Date</label>
-        <input type="date" id="date" required />
+      <div id="page-add" class="page">
+        <div class="form-container">
+          <div class="form-card">
+            <div class="form-header">
+              <h2>➕ Add New Expense</h2>
+              <p>Record your Home Expense entry</p>
+            </div>
+
+            <form id="expenseForm">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>🛍️ What did you buy?</label>
+                  <input type="text" id="title" placeholder="e.g. Vegetables, Milk, Medicine" required/>
+                </div>
+                <div class="form-group">
+                  <label>💰 Amount (₹)</label>
+                  <input type="number" id="amount" placeholder="e.g. 250" min="1" required/>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>🗂️ Category</label>
+                  <select id="category">
+                    <option value="Groceries">🛒 Groceries</option>
+                    <option value="Vegetables">🥦 Vegetables</option>
+                    <option value="Fruits">🍎 Fruits</option>
+                    <option value="Milk & Dairy">🥛 Milk & Dairy</option>
+                    <option value="Medical">💊 Medical</option>
+                    <option value="Electricity">💡 Electricity</option>
+                    <option value="Water">💧 Water</option>
+                    <option value="School">🏫 School</option>
+                    <option value="Transport">🚗 Transport</option>
+                    <option value="Clothes">👗 Clothes</option>
+                    <option value="Kitchen">🍳 Kitchen</option>
+                    <option value="Entertainment">🎬 Entertainment</option>
+                    <option value="Religious">🙏 Religious</option>
+                    <option value="Gifts">🎁 Gifts</option>
+                    <option value="Other">📦 Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>📅 Date</label>
+                  <input type="date" id="date" required/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>📝 Note (Optional)</label>
+                <input type="text" id="note" placeholder="Any extra details..."/>
+              </div>
+
+              <div class="form-group">
+                <label>💳 Payment Method</label>
+                <div class="payment-options">
+                  <label class="radio-card">
+                    <input type="radio" name="payment" value="Cash" checked/>
+                    <span>💵 Cash</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="payment" value="UPI"/>
+                    <span>📱 UPI</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="payment" value="Card"/>
+                    <span>💳 Card</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="payment" value="Other"/>
+                    <span>🔄 Other</span>
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-submit">💾 Save to Home Expense</button>
+            </form>
+
+            <div id="successMsg" class="success-msg" style="display:none;">
+              ✅ Expense saved to Home Expense successfully!
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Note (Optional)</label>
-        <input type="text" id="note" placeholder="Any extra note..." />
+      <div id="page-history" class="page">
+        <div class="filter-bar">
+          <input type="text" id="searchBox" placeholder="🔍 Search in Home Expense..." class="search-input"/>
+          <select id="filterCategory" class="filter-select">
+            <option value="All">📦 All Categories</option>
+            <option value="Groceries">🛒 Groceries</option>
+            <option value="Vegetables">🥦 Vegetables</option>
+            <option value="Fruits">🍎 Fruits</option>
+            <option value="Milk & Dairy">🥛 Milk & Dairy</option>
+            <option value="Medical">💊 Medical</option>
+            <option value="Electricity">💡 Electricity</option>
+            <option value="Water">💧 Water</option>
+            <option value="School">🏫 School</option>
+            <option value="Transport">🚗 Transport</option>
+            <option value="Clothes">👗 Clothes</option>
+            <option value="Kitchen">🍳 Kitchen</option>
+            <option value="Entertainment">🎬 Entertainment</option>
+            <option value="Religious">🙏 Religious</option>
+            <option value="Gifts">🎁 Gifts</option>
+            <option value="Other">📦 Other</option>
+          </select>
+          <select id="filterMonth" class="filter-select">
+            <option value="All">📅 All Months</option>
+          </select>
+          <select id="sortBy" class="filter-select">
+            <option value="newest">↕️ Newest First</option>
+            <option value="oldest">↕️ Oldest First</option>
+            <option value="highest">💰 Highest Amount</option>
+            <option value="lowest">💰 Lowest Amount</option>
+          </select>
+        </div>
+
+        <div class="filtered-total">
+          <span>Showing: <strong id="filteredCount">0</strong> expenses</span>
+          <span>Total: <strong id="filteredTotal">₹0</strong></span>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="expense-table">
+            <thead>
+              <tr>
+                <th>📅 Date</th>
+                <th>🛍️ Item</th>
+                <th>🗂️ Category</th>
+                <th>💳 Payment</th>
+                <th>💰 Amount</th>
+                <th>📝 Note</th>
+                <th>⚙️ Action</th>
+              </tr>
+            </thead>
+            <tbody id="expenseBody"></tbody>
+          </table>
+          <div id="noData" class="empty-state" style="display:none;">
+            <p>🔍</p>
+            <h3>No expenses found</h3>
+            <p>Try changing your search or filter</p>
+          </div>
+        </div>
       </div>
 
-      <button type="submit" class="btn-add">💾 Save to Home Expense</button>
-    </form>
-  </section>
+      <div id="page-reports" class="page">
+        <div class="report-controls">
+          <select id="reportMonth" class="filter-select">
+            <option value="All">All Time</option>
+          </select>
+          <button class="btn-primary" onclick="generateReport()">📊 Generate Report</button>
+          <button class="btn-secondary" onclick="printReport()">🖨️ Print</button>
+        </div>
 
-  <!-- FILTER & SEARCH -->
-  <section class="filter-section">
-    <h2>📋 All Expenses</h2>
-    <div class="filters">
-      <input type="text" id="searchBox" placeholder="🔍 Search expenses..." />
-      <select id="filterCategory">
-        <option value="All">All Categories</option>
-        <option value="Groceries">🛒 Groceries</option>
-        <option value="Vegetables">🥦 Vegetables</option>
-        <option value="Fruits">🍎 Fruits</option>
-        <option value="Milk & Dairy">🥛 Milk & Dairy</option>
-        <option value="Medical">💊 Medical</option>
-        <option value="Electricity">💡 Electricity</option>
-        <option value="Water">💧 Water</option>
-        <option value="School">🏫 School</option>
-        <option value="Transport">🚗 Transport</option>
-        <option value="Clothes">👗 Clothes</option>
-        <option value="Entertainment">🎬 Entertainment</option>
-        <option value="Other">📦 Other</option>
-      </select>
+        <div class="report-summary" id="reportSummary">
+          <div class="report-card">
+            <h3>Total Spent</h3>
+            <p id="report-total">₹0</p>
+          </div>
+          <div class="report-card">
+            <h3>No. of Expenses</h3>
+            <p id="report-count">0</p>
+          </div>
+          <div class="report-card">
+            <h3>Average per Day</h3>
+            <p id="report-avg">₹0</p>
+          </div>
+          <div class="report-card">
+            <h3>Top Category</h3>
+            <p id="report-top">-</p>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header">
+            <h3>📊 Spending by Category</h3>
+          </div>
+          <div id="reportChart"></div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header">
+            <h3>📅 Daily Breakdown</h3>
+          </div>
+          <div id="dailyBreakdown"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="editModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>✏️ Edit Expense - Home Expense</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <form id="editForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" id="edit-title" required/>
+          </div>
+          <div class="form-group">
+            <label>Amount (₹)</label>
+            <input type="number" id="edit-amount" required/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="edit-category">
+              <option value="Groceries">🛒 Groceries</option>
+              <option value="Vegetables">🥦 Vegetables</option>
+              <option value="Fruits">🍎 Fruits</option>
+              <option value="Milk & Dairy">🥛 Milk & Dairy</option>
+              <option value="Medical">💊 Medical</option>
+              <option value="Electricity">💡 Electricity</option>
+              <option value="Water">💧 Water</option>
+              <option value="School">🏫 School</option>
+              <option value="Transport">🚗 Transport</option>
+              <option value="Clothes">👗 Clothes</option>
+              <option value="Kitchen">🍳 Kitchen</option>
+              <option value="Entertainment">🎬 Entertainment</option>
+              <option value="Religious">🙏 Religious</option>
+              <option value="Gifts">🎁 Gifts</option>
+              <option value="Other">📦 Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="edit-date" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Note</label>
+          <input type="text" id="edit-note"/>
+        </div>
+        <input type="hidden" id="edit-id"/>
+        <button type="submit" class="btn-submit">💾 Update in Home Expense</button>
+      </form>
     </div>
-  </section>
+  </div>
 
-  <!-- EXPENSES TABLE -->
-  <section class="table-section">
-    <table id="expenseTable">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Item</th>
-          <th>Category</th>
-          <th>Amount</th>
-          <th>Note</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="expenseBody">
-        <!-- Data loads here -->
-      </tbody>
-    </table>
-    <p id="noData" style="display:none; text-align:center; color:#999;">
-      No expenses found in Home Expense
-    </p>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <p>🏠 Home Expense | Made with ❤️ for Mom</p>
-  </footer>
+  <div id="toast" class="toast" style="display:none;"></div>
 
   <script src="app.js"></script>
 </body>
