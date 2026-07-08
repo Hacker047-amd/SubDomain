@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home Expense</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>🏠 Home Expense</h1>
+    <p>Track your family expenses easily</p>
+  </header>
+
+  <!-- SUMMARY CARDS -->
+  <section class="summary">
+    <div class="card total">
+      <h3>Total Spent</h3>
+      <p id="totalAmount">₹0</p>
+    </div>
+    <div class="card count">
+      <h3>Total Entries</h3>
+      <p id="totalCount">0</p>
+    </div>
+    <div class="card highest">
+      <h3>Highest Expense</h3>
+      <p id="highestAmount">₹0</p>
+    </div>
+  </section>
+
+  <!-- ADD EXPENSE FORM -->
+  <section class="form-section">
+    <h2>➕ Add New Expense</h2>
+    <form id="expenseForm">
+      
+      <div class="form-group">
+        <label>What did you buy?</label>
+        <input type="text" id="title" placeholder="e.g. Vegetables, Milk" required />
+      </div>
+
+      <div class="form-group">
+        <label>Amount (₹)</label>
+        <input type="number" id="amount" placeholder="e.g. 250" required />
+      </div>
+
+      <div class="form-group">
+        <label>Category</label>
+        <select id="category">
+          <option value="Groceries">🛒 Groceries</option>
+          <option value="Vegetables">🥦 Vegetables</option>
+          <option value="Fruits">🍎 Fruits</option>
+          <option value="Milk & Dairy">🥛 Milk & Dairy</option>
+          <option value="Medical">💊 Medical</option>
+          <option value="Electricity">💡 Electricity</option>
+          <option value="Water">💧 Water</option>
+          <option value="School">🏫 School</option>
+          <option value="Transport">🚗 Transport</option>
+          <option value="Clothes">👗 Clothes</option>
+          <option value="Entertainment">🎬 Entertainment</option>
+          <option value="Other">📦 Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="date" required />
+      </div>
+
+      <div class="form-group">
+        <label>Note (Optional)</label>
+        <input type="text" id="note" placeholder="Any extra note..." />
+      </div>
+
+      <button type="submit" class="btn-add">💾 Save to Home Expense</button>
+    </form>
+  </section>
+
+  <!-- FILTER & SEARCH -->
+  <section class="filter-section">
+    <h2>📋 All Expenses</h2>
+    <div class="filters">
+      <input type="text" id="searchBox" placeholder="🔍 Search expenses..." />
+      <select id="filterCategory">
+        <option value="All">All Categories</option>
+        <option value="Groceries">🛒 Groceries</option>
+        <option value="Vegetables">🥦 Vegetables</option>
+        <option value="Fruits">🍎 Fruits</option>
+        <option value="Milk & Dairy">🥛 Milk & Dairy</option>
+        <option value="Medical">💊 Medical</option>
+        <option value="Electricity">💡 Electricity</option>
+        <option value="Water">💧 Water</option>
+        <option value="School">🏫 School</option>
+        <option value="Transport">🚗 Transport</option>
+        <option value="Clothes">👗 Clothes</option>
+        <option value="Entertainment">🎬 Entertainment</option>
+        <option value="Other">📦 Other</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- EXPENSES TABLE -->
+  <section class="table-section">
+    <table id="expenseTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Item</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Note</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="expenseBody">
+        <!-- Data loads here -->
+      </tbody>
+    </table>
+    <p id="noData" style="display:none; text-align:center; color:#999;">
+      No expenses found in Home Expense
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>🏠 Home Expense | Made with ❤️ for Mom</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
