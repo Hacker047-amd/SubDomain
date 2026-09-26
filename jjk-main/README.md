@@ -38,3 +38,6 @@ You need a modern web browser (Chrome, Edge, Firefox) and a webcam.
 ## Note 
 
 This project was built and powered by **Google Gemini 3**.
+
+This project's original author and all credits go to awnish9002
+His's Github repo https://github.com/awnish9002
