@@ -9,12 +9,12 @@
 <body>
     <!-- Floating Background Elements -->
     <div class="background-animation">
-        <div class="heart">❤️</div>
-        <div class="heart">🌸</div>
-        <div class="heart">❤️</div>
-        <div class="heart">✨</div>
-        <div class="heart">🌸</div>
-        <div class="heart">❤️</div>
+        <div class="heart">&#10084;&#65039;</div>
+        <div class="heart">&#127800;</div>
+        <div class="heart">&#10084;&#65039;</div>
+        <div class="heart">&#10024;</div>
+        <div class="heart">&#127800;</div>
+        <div class="heart">&#10084;&#65039;</div>
     </div>
 
     <!-- Cloud-Optimized Audio Stream (Bypasses GitHub build errors entirely) -->
@@ -26,9 +26,10 @@
     <!-- Initial Welcome Overlay to Force Autoplay securely -->
     <div id="welcome-overlay" class="overlay">
         <div class="overlay-box">
-            <div class="heart-banner">💝</div>
+            <div class="heart-banner">&#128157;</div>
             <h2>A Message For Mom</h2>
             <p>Please click below to listen to my message</p>
+            <button class="primary-btn" onclick="startEverything()">Start Apology / &#2455;&#2494;&#2472;&#2463;&#2495; &#2458;&#2494;&#2482;&#2497; &#2453;&#2480;&#2507; &#127925;</button>
             <button class="btn-base primary-btn" onclick="startEverything()">Start Apology / গানটি চালু করো 🎵</button>
         </div>
     </div>
@@ -38,10 +39,10 @@
         <!-- Interactive Language Button -->
         <button id="translate-btn" class="btn-base action-btn" onclick="toggleLanguage()">Translate to Bengali / বাংলায় পড়ো 🇧🇩</button>
 
-        <div class="heart-banner">💝</div>
+        <div class="heart-banner">&#128157;</div>
 
         <header>
-            <h1 id="main-title">I'm Truly Sorry, Mom 💔</h1>
+            <h1 id="main-title">I'm Truly Sorry, Mom &#128148;</h1>
             <p id="subtitle" class="subtitle">Please read this message from my heart</p>
         </header>
         
@@ -68,21 +69,21 @@
                 <h2 id="grateful-title">Things I Am Forever Grateful For</h2>
                 
                 <details>
-                    <summary id="sum-1">✨ You always look out for me</summary>
+                    <summary id="sum-1">&#10024; You always look out for me</summary>
                     <div class="details-content">
                         <p id="desc-1">Even when you are strict, I know it is because you care deeply about our family, our future, and our well-being.</p>
                     </div>
                 </details>
 
                 <details>
-                    <summary id="sum-2">⏳ Your endless patience</summary>
+                    <summary id="sum-2">&#8987; Your endless patience</summary>
                     <div class="details-content">
                         <p id="desc-2">You forgive me for my mistakes time and time again, even when I carelessly repeat them.</p>
                     </div>
                 </details>
 
                 <details>
-                    <summary id="sum-3">🏠 Everything you do daily</summary>
+                    <summary id="sum-3">&#127968; Everything you do daily</summary>
                     <div class="details-content">
                         <p id="desc-3">From managing the household to caring for my health, your hard work never goes unnoticed or unappreciated.</p>
                     </div>
@@ -95,17 +96,83 @@
     <script>
         let currentLang = 'en';
 
-        function startEverything() {
-            const music = document.getElementById('bg-music');
-            music.load();
-            music.play().then(() => {
-                console.log("Playback successfully started.");
-            }).catch(error => {
-                console.log("Playback block intercepted:", error);
-            });
+        function getElement(id) {
+            var el = document.getElementById(id);
+            if (!el) {
+                console.error("Missing element: #" + id);
+            }
+            return el;
+        }
 
-            document.getElementById('welcome-overlay').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
+        function setText(id, text) {
+            var el = getElement(id);
+            if (el) el.innerText = text;
+        }
+
+        function setHTML(id, html) {
+            var el = getElement(id);
+            if (el) el.innerHTML = html;
+        }
+
+        function showAudioError() {
+            var overlay = getElement("welcome-overlay");
+            if (overlay && overlay.style.display !== "none") return;
+            var notice = document.getElementById("audio-error-notice");
+            if (!notice) {
+                notice = document.createElement("div");
+                notice.id = "audio-error-notice";
+                notice.style.cssText = "text-align:center;color:#c53030;font-size:0.85rem;margin-bottom:12px;";
+                notice.textContent = "Audio could not be played. You can still read the message below.";
+                var container = getElement("main-content");
+                if (container) container.prepend(notice);
+            }
+        }
+
+        (function setupAudioErrorHandling() {
+            var music = getElement("bg-music");
+            if (music) {
+                music.addEventListener("error", function(e) {
+                    var mediaErr = music.error;
+                    var msg = mediaErr ? "code=" + mediaErr.code + " " + (mediaErr.message || "") : "unknown";
+                    console.error("Audio load error:", msg);
+                    showAudioError();
+                });
+            }
+        })();
+
+        function startEverything() {
+            var music = getElement("bg-music");
+            var overlay = getElement("welcome-overlay");
+            var content = getElement("main-content");
+
+            if (!overlay || !content) {
+                console.error("Critical page elements missing; cannot proceed.");
+                return;
+            }
+
+            overlay.style.display = "none";
+            content.style.display = "block";
+
+            if (!music) {
+                console.error("Audio element not found; skipping playback.");
+                showAudioError();
+                return;
+            }
+
+            try {
+                music.load();
+            } catch (loadErr) {
+                console.error("Audio load() threw:", loadErr);
+                showAudioError();
+                return;
+            }
+
+            music.play().then(function() {
+                console.log("Playback successfully started.");
+            }).catch(function(error) {
+                console.error("Playback failed:", error.message || error);
+                showAudioError();
+            });
         }
 
         function toggleLanguage() {
